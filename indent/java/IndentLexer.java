@@ -16,7 +16,7 @@ public class IndentLexer extends Lexer {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		NEWLINE=1, VARIABLE=2, TABS=3;
+		T__0=1, T__1=2, NEWLINE=3, VARIABLE=4, TABS=5;
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
 	};
@@ -27,20 +27,20 @@ public class IndentLexer extends Lexer {
 
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"NEWLINE", "VARIABLE", "TABS"
+			"T__0", "T__1", "NEWLINE", "VARIABLE", "TABS"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'\n'", null, "'-'"
+			null, "'if'", "'else'", "'\n'", null, "'-'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "NEWLINE", "VARIABLE", "TABS"
+			null, null, null, "NEWLINE", "VARIABLE", "TABS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -102,12 +102,15 @@ public class IndentLexer extends Lexer {
 	public ATN getATN() { return _ATN; }
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\2\5\22\b\1\4\2\t\2"+
-		"\4\3\t\3\4\4\t\4\3\2\3\2\3\3\6\3\r\n\3\r\3\16\3\16\3\4\3\4\2\2\5\3\3\5"+
-		"\4\7\5\3\2\3\3\2c|\2\22\2\3\3\2\2\2\2\5\3\2\2\2\2\7\3\2\2\2\3\t\3\2\2"+
-		"\2\5\f\3\2\2\2\7\20\3\2\2\2\t\n\7\f\2\2\n\4\3\2\2\2\13\r\t\2\2\2\f\13"+
-		"\3\2\2\2\r\16\3\2\2\2\16\f\3\2\2\2\16\17\3\2\2\2\17\6\3\2\2\2\20\21\7"+
-		"/\2\2\21\b\3\2\2\2\4\2\16\2";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\2\7\36\b\1\4\2\t\2"+
+		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\4\3"+
+		"\4\3\5\6\5\31\n\5\r\5\16\5\32\3\6\3\6\2\2\7\3\3\5\4\7\5\t\6\13\7\3\2\3"+
+		"\3\2c|\2\36\2\3\3\2\2\2\2\5\3\2\2\2\2\7\3\2\2\2\2\t\3\2\2\2\2\13\3\2\2"+
+		"\2\3\r\3\2\2\2\5\20\3\2\2\2\7\25\3\2\2\2\t\30\3\2\2\2\13\34\3\2\2\2\r"+
+		"\16\7k\2\2\16\17\7h\2\2\17\4\3\2\2\2\20\21\7g\2\2\21\22\7n\2\2\22\23\7"+
+		"u\2\2\23\24\7g\2\2\24\6\3\2\2\2\25\26\7\f\2\2\26\b\3\2\2\2\27\31\t\2\2"+
+		"\2\30\27\3\2\2\2\31\32\3\2\2\2\32\30\3\2\2\2\32\33\3\2\2\2\33\n\3\2\2"+
+		"\2\34\35\7/\2\2\35\f\3\2\2\2\4\2\32\2";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

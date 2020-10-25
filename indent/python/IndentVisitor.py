@@ -19,6 +19,11 @@ class IndentVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by IndentParser#commandIf.
+    def visitCommandIf(self, ctx:IndentParser.CommandIfContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by IndentParser#commandEmptyLine.
     def visitCommandEmptyLine(self, ctx:IndentParser.CommandEmptyLineContext):
         return self.visitChildren(ctx)

@@ -16,7 +16,7 @@ public class IndentParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		NEWLINE=1, VARIABLE=2, TABS=3, INDENT=4, DEDENT=5;
+		T__0=1, T__1=2, NEWLINE=3, VARIABLE=4, TABS=5, INDENT=6, DEDENT=7;
 	public static final int
 		RULE_program = 0, RULE_commands = 1;
 	private static String[] makeRuleNames() {
@@ -28,13 +28,13 @@ public class IndentParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'\n'", null, "'-'"
+			null, "'if'", "'else'", "'\n'", null, "'-'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "NEWLINE", "VARIABLE", "TABS", "INDENT", "DEDENT"
+			null, null, null, "NEWLINE", "VARIABLE", "TABS", "INDENT", "DEDENT"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -112,7 +112,7 @@ public class IndentParser extends Parser {
 			setState(7);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NEWLINE) | (1L << VARIABLE) | (1L << INDENT) | (1L << DEDENT))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__0) | (1L << NEWLINE) | (1L << VARIABLE) | (1L << INDENT) | (1L << DEDENT))) != 0)) {
 				{
 				{
 				setState(4);
@@ -162,17 +162,35 @@ public class IndentParser extends Parser {
 		public TerminalNode NEWLINE() { return getToken(IndentParser.NEWLINE, 0); }
 		public CommandEmptyLineContext(CommandsContext ctx) { copyFrom(ctx); }
 	}
+	public static class CommandIfContext extends CommandsContext {
+		public Token var;
+		public Token trueP;
+		public Token falseP;
+		public List<TerminalNode> NEWLINE() { return getTokens(IndentParser.NEWLINE); }
+		public TerminalNode NEWLINE(int i) {
+			return getToken(IndentParser.NEWLINE, i);
+		}
+		public List<TerminalNode> INDENT() { return getTokens(IndentParser.INDENT); }
+		public TerminalNode INDENT(int i) {
+			return getToken(IndentParser.INDENT, i);
+		}
+		public List<TerminalNode> VARIABLE() { return getTokens(IndentParser.VARIABLE); }
+		public TerminalNode VARIABLE(int i) {
+			return getToken(IndentParser.VARIABLE, i);
+		}
+		public TerminalNode DEDENT() { return getToken(IndentParser.DEDENT, 0); }
+		public CommandIfContext(CommandsContext ctx) { copyFrom(ctx); }
+	}
 
 	public final CommandsContext commands() throws RecognitionException {
 		CommandsContext _localctx = new CommandsContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_commands);
 		int _la;
 		try {
-			setState(16);
+			setState(31);
 			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case INDENT:
-			case DEDENT:
+			switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
+			case 1:
 				_localctx = new CommandExprContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
@@ -189,7 +207,7 @@ public class IndentParser extends Parser {
 				}
 				}
 				break;
-			case VARIABLE:
+			case 2:
 				_localctx = new CommandExprContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
@@ -199,16 +217,56 @@ public class IndentParser extends Parser {
 				match(NEWLINE);
 				}
 				break;
-			case NEWLINE:
-				_localctx = new CommandEmptyLineContext(_localctx);
+			case 3:
+				_localctx = new CommandIfContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(15);
+				match(T__0);
+				setState(16);
+				match(NEWLINE);
+				setState(17);
+				match(INDENT);
+				setState(18);
+				((CommandIfContext)_localctx).var = match(VARIABLE);
+				setState(19);
 				match(NEWLINE);
 				}
 				break;
-			default:
-				throw new NoViableAltException(this);
+			case 4:
+				_localctx = new CommandIfContext(_localctx);
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(20);
+				match(T__0);
+				setState(21);
+				match(NEWLINE);
+				setState(22);
+				match(INDENT);
+				setState(23);
+				((CommandIfContext)_localctx).trueP = match(VARIABLE);
+				setState(24);
+				match(NEWLINE);
+				setState(25);
+				match(DEDENT);
+				setState(26);
+				match(T__1);
+				setState(27);
+				match(NEWLINE);
+				setState(28);
+				match(INDENT);
+				setState(29);
+				((CommandIfContext)_localctx).falseP = match(VARIABLE);
+				}
+				break;
+			case 5:
+				_localctx = new CommandEmptyLineContext(_localctx);
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(30);
+				match(NEWLINE);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -223,13 +281,16 @@ public class IndentParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\7\25\4\2\t\2\4\3"+
-		"\t\3\3\2\7\2\b\n\2\f\2\16\2\13\13\2\3\2\3\2\3\3\3\3\3\3\3\3\5\3\23\n\3"+
-		"\3\3\2\2\4\2\4\2\3\3\2\6\7\2\25\2\t\3\2\2\2\4\22\3\2\2\2\6\b\5\4\3\2\7"+
-		"\6\3\2\2\2\b\13\3\2\2\2\t\7\3\2\2\2\t\n\3\2\2\2\n\f\3\2\2\2\13\t\3\2\2"+
-		"\2\f\r\7\2\2\3\r\3\3\2\2\2\16\23\t\2\2\2\17\20\7\4\2\2\20\23\7\3\2\2\21"+
-		"\23\7\3\2\2\22\16\3\2\2\2\22\17\3\2\2\2\22\21\3\2\2\2\23\5\3\2\2\2\4\t"+
-		"\22";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\t$\4\2\t\2\4\3\t"+
+		"\3\3\2\7\2\b\n\2\f\2\16\2\13\13\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
+		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3\"\n\3\3\3\2\2\4\2"+
+		"\4\2\3\3\2\b\t\2&\2\t\3\2\2\2\4!\3\2\2\2\6\b\5\4\3\2\7\6\3\2\2\2\b\13"+
+		"\3\2\2\2\t\7\3\2\2\2\t\n\3\2\2\2\n\f\3\2\2\2\13\t\3\2\2\2\f\r\7\2\2\3"+
+		"\r\3\3\2\2\2\16\"\t\2\2\2\17\20\7\6\2\2\20\"\7\5\2\2\21\22\7\3\2\2\22"+
+		"\23\7\5\2\2\23\24\7\b\2\2\24\25\7\6\2\2\25\"\7\5\2\2\26\27\7\3\2\2\27"+
+		"\30\7\5\2\2\30\31\7\b\2\2\31\32\7\6\2\2\32\33\7\5\2\2\33\34\7\t\2\2\34"+
+		"\35\7\4\2\2\35\36\7\5\2\2\36\37\7\b\2\2\37\"\7\6\2\2 \"\7\5\2\2!\16\3"+
+		"\2\2\2!\17\3\2\2\2!\21\3\2\2\2!\26\3\2\2\2! \3\2\2\2\"\5\3\2\2\2\4\t!";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
