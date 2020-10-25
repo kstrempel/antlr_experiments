@@ -1,0 +1,5 @@
+NEWLINE=1
+VARIABLE=2
+TABS=3
+'\n'=1
+'-'=3
