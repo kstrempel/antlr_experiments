@@ -12,18 +12,13 @@ else:
 def serializedATN():
     with StringIO() as buf:
         buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\7")
-        buf.write(" \4\2\t\2\4\3\t\3\3\2\7\2\b\n\2\f\2\16\2\13\13\2\3\2\3")
-        buf.write("\2\3\3\7\3\20\n\3\f\3\16\3\23\13\3\3\3\3\3\7\3\27\n\3")
-        buf.write("\f\3\16\3\32\13\3\3\3\3\3\5\3\36\n\3\3\3\2\2\4\2\4\2\3")
-        buf.write("\3\2\6\7\2!\2\t\3\2\2\2\4\35\3\2\2\2\6\b\5\4\3\2\7\6\3")
-        buf.write("\2\2\2\b\13\3\2\2\2\t\7\3\2\2\2\t\n\3\2\2\2\n\f\3\2\2")
-        buf.write("\2\13\t\3\2\2\2\f\r\7\2\2\3\r\3\3\2\2\2\16\20\t\2\2\2")
-        buf.write("\17\16\3\2\2\2\20\23\3\2\2\2\21\17\3\2\2\2\21\22\3\2\2")
-        buf.write("\2\22\24\3\2\2\2\23\21\3\2\2\2\24\30\7\4\2\2\25\27\7\5")
-        buf.write("\2\2\26\25\3\2\2\2\27\32\3\2\2\2\30\26\3\2\2\2\30\31\3")
-        buf.write("\2\2\2\31\33\3\2\2\2\32\30\3\2\2\2\33\36\7\3\2\2\34\36")
-        buf.write("\7\3\2\2\35\21\3\2\2\2\35\34\3\2\2\2\36\5\3\2\2\2\6\t")
-        buf.write("\21\30\35")
+        buf.write("\25\4\2\t\2\4\3\t\3\3\2\7\2\b\n\2\f\2\16\2\13\13\2\3\2")
+        buf.write("\3\2\3\3\3\3\3\3\3\3\5\3\23\n\3\3\3\2\2\4\2\4\2\3\3\2")
+        buf.write("\6\7\2\25\2\t\3\2\2\2\4\22\3\2\2\2\6\b\5\4\3\2\7\6\3\2")
+        buf.write("\2\2\b\13\3\2\2\2\t\7\3\2\2\2\t\n\3\2\2\2\n\f\3\2\2\2")
+        buf.write("\13\t\3\2\2\2\f\r\7\2\2\3\r\3\3\2\2\2\16\23\t\2\2\2\17")
+        buf.write("\20\7\4\2\2\20\23\7\3\2\2\21\23\7\3\2\2\22\16\3\2\2\2")
+        buf.write("\22\17\3\2\2\2\22\21\3\2\2\2\23\5\3\2\2\2\4\t\22")
         return buf.getvalue()
 
 
@@ -143,25 +138,14 @@ class IndentParser ( Parser ):
             self.var = None # Token
             self.copyFrom(ctx)
 
+        def INDENT(self):
+            return self.getToken(IndentParser.INDENT, 0)
+        def DEDENT(self):
+            return self.getToken(IndentParser.DEDENT, 0)
         def NEWLINE(self):
             return self.getToken(IndentParser.NEWLINE, 0)
         def VARIABLE(self):
             return self.getToken(IndentParser.VARIABLE, 0)
-        def TABS(self, i:int=None):
-            if i is None:
-                return self.getTokens(IndentParser.TABS)
-            else:
-                return self.getToken(IndentParser.TABS, i)
-        def INDENT(self, i:int=None):
-            if i is None:
-                return self.getTokens(IndentParser.INDENT)
-            else:
-                return self.getToken(IndentParser.INDENT, i)
-        def DEDENT(self, i:int=None):
-            if i is None:
-                return self.getTokens(IndentParser.DEDENT)
-            else:
-                return self.getToken(IndentParser.DEDENT, i)
 
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitCommandExpr" ):
@@ -170,7 +154,7 @@ class IndentParser ( Parser ):
                 return visitor.visitChildren(self)
 
 
-    class CommandNewlineContext(CommandsContext):
+    class CommandEmptyLineContext(CommandsContext):
 
         def __init__(self, parser, ctx:ParserRuleContext): # actually a IndentParser.CommandsContext
             super().__init__(parser)
@@ -180,8 +164,8 @@ class IndentParser ( Parser ):
             return self.getToken(IndentParser.NEWLINE, 0)
 
         def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitCommandNewline" ):
-                return visitor.visitCommandNewline(self)
+            if hasattr( visitor, "visitCommandEmptyLine" ):
+                return visitor.visitCommandEmptyLine(self)
             else:
                 return visitor.visitChildren(self)
 
@@ -193,47 +177,33 @@ class IndentParser ( Parser ):
         self.enterRule(localctx, 2, self.RULE_commands)
         self._la = 0 # Token type
         try:
-            self.state = 27
+            self.state = 16
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [IndentParser.VARIABLE, IndentParser.INDENT, IndentParser.DEDENT]:
+            if token in [IndentParser.INDENT, IndentParser.DEDENT]:
                 localctx = IndentParser.CommandExprContext(self, localctx)
                 self.enterOuterAlt(localctx, 1)
-                self.state = 15
-                self._errHandler.sync(self)
+                self.state = 12
+                localctx.inden = self._input.LT(1)
                 _la = self._input.LA(1)
-                while _la==IndentParser.INDENT or _la==IndentParser.DEDENT:
-                    self.state = 12
-                    localctx.inden = self._input.LT(1)
-                    _la = self._input.LA(1)
-                    if not(_la==IndentParser.INDENT or _la==IndentParser.DEDENT):
-                        localctx.inden = self._errHandler.recoverInline(self)
-                    else:
-                        self._errHandler.reportMatch(self)
-                        self.consume()
-                    self.state = 17
-                    self._errHandler.sync(self)
-                    _la = self._input.LA(1)
-
-                self.state = 18
+                if not(_la==IndentParser.INDENT or _la==IndentParser.DEDENT):
+                    localctx.inden = self._errHandler.recoverInline(self)
+                else:
+                    self._errHandler.reportMatch(self)
+                    self.consume()
+                pass
+            elif token in [IndentParser.VARIABLE]:
+                localctx = IndentParser.CommandExprContext(self, localctx)
+                self.enterOuterAlt(localctx, 2)
+                self.state = 13
                 localctx.var = self.match(IndentParser.VARIABLE)
-                self.state = 22
-                self._errHandler.sync(self)
-                _la = self._input.LA(1)
-                while _la==IndentParser.TABS:
-                    self.state = 19
-                    self.match(IndentParser.TABS)
-                    self.state = 24
-                    self._errHandler.sync(self)
-                    _la = self._input.LA(1)
-
-                self.state = 25
+                self.state = 14
                 self.match(IndentParser.NEWLINE)
                 pass
             elif token in [IndentParser.NEWLINE]:
-                localctx = IndentParser.CommandNewlineContext(self, localctx)
-                self.enterOuterAlt(localctx, 2)
-                self.state = 26
+                localctx = IndentParser.CommandEmptyLineContext(self, localctx)
+                self.enterOuterAlt(localctx, 3)
+                self.state = 15
                 self.match(IndentParser.NEWLINE)
                 pass
             else:

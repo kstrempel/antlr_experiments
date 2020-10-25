@@ -112,7 +112,7 @@ public class IndentParser extends Parser {
 			setState(7);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NEWLINE) | (1L << VARIABLE) | (1L << TABS) | (1L << INDENT) | (1L << DEDENT))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NEWLINE) | (1L << VARIABLE) | (1L << INDENT) | (1L << DEDENT))) != 0)) {
 				{
 				{
 				setState(4);
@@ -152,29 +152,15 @@ public class IndentParser extends Parser {
 	public static class CommandExprContext extends CommandsContext {
 		public Token inden;
 		public Token var;
+		public TerminalNode INDENT() { return getToken(IndentParser.INDENT, 0); }
+		public TerminalNode DEDENT() { return getToken(IndentParser.DEDENT, 0); }
 		public TerminalNode NEWLINE() { return getToken(IndentParser.NEWLINE, 0); }
 		public TerminalNode VARIABLE() { return getToken(IndentParser.VARIABLE, 0); }
-		public List<TerminalNode> TABS() { return getTokens(IndentParser.TABS); }
-		public TerminalNode TABS(int i) {
-			return getToken(IndentParser.TABS, i);
-		}
-		public List<TerminalNode> INDENT() { return getTokens(IndentParser.INDENT); }
-		public TerminalNode INDENT(int i) {
-			return getToken(IndentParser.INDENT, i);
-		}
-		public List<TerminalNode> DEDENT() { return getTokens(IndentParser.DEDENT); }
-		public TerminalNode DEDENT(int i) {
-			return getToken(IndentParser.DEDENT, i);
-		}
 		public CommandExprContext(CommandsContext ctx) { copyFrom(ctx); }
 	}
-	public static class CommandNewlineContext extends CommandsContext {
+	public static class CommandEmptyLineContext extends CommandsContext {
 		public TerminalNode NEWLINE() { return getToken(IndentParser.NEWLINE, 0); }
-		public List<TerminalNode> TABS() { return getTokens(IndentParser.TABS); }
-		public TerminalNode TABS(int i) {
-			return getToken(IndentParser.TABS, i);
-		}
-		public CommandNewlineContext(CommandsContext ctx) { copyFrom(ctx); }
+		public CommandEmptyLineContext(CommandsContext ctx) { copyFrom(ctx); }
 	}
 
 	public final CommandsContext commands() throws RecognitionException {
@@ -182,78 +168,42 @@ public class IndentParser extends Parser {
 		enterRule(_localctx, 2, RULE_commands);
 		int _la;
 		try {
-			setState(33);
+			setState(16);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case VARIABLE:
 			case INDENT:
 			case DEDENT:
 				_localctx = new CommandExprContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(15);
-				_errHandler.sync(this);
+				setState(12);
+				((CommandExprContext)_localctx).inden = _input.LT(1);
 				_la = _input.LA(1);
-				while (_la==INDENT || _la==DEDENT) {
-					{
-					{
-					setState(12);
-					((CommandExprContext)_localctx).inden = _input.LT(1);
-					_la = _input.LA(1);
-					if ( !(_la==INDENT || _la==DEDENT) ) {
-						((CommandExprContext)_localctx).inden = (Token)_errHandler.recoverInline(this);
-					}
-					else {
-						if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-						_errHandler.reportMatch(this);
-						consume();
-					}
-					}
-					}
-					setState(17);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
+				if ( !(_la==INDENT || _la==DEDENT) ) {
+					((CommandExprContext)_localctx).inden = (Token)_errHandler.recoverInline(this);
 				}
-				setState(18);
+				else {
+					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+					_errHandler.reportMatch(this);
+					consume();
+				}
+				}
+				break;
+			case VARIABLE:
+				_localctx = new CommandExprContext(_localctx);
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(13);
 				((CommandExprContext)_localctx).var = match(VARIABLE);
-				setState(22);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while (_la==TABS) {
-					{
-					{
-					setState(19);
-					match(TABS);
-					}
-					}
-					setState(24);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
-				setState(25);
+				setState(14);
 				match(NEWLINE);
 				}
 				break;
 			case NEWLINE:
-			case TABS:
-				_localctx = new CommandNewlineContext(_localctx);
-				enterOuterAlt(_localctx, 2);
+				_localctx = new CommandEmptyLineContext(_localctx);
+				enterOuterAlt(_localctx, 3);
 				{
-				setState(29);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while (_la==TABS) {
-					{
-					{
-					setState(26);
-					match(TABS);
-					}
-					}
-					setState(31);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
-				setState(32);
+				setState(15);
 				match(NEWLINE);
 				}
 				break;
@@ -273,17 +223,13 @@ public class IndentParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\7&\4\2\t\2\4\3\t"+
-		"\3\3\2\7\2\b\n\2\f\2\16\2\13\13\2\3\2\3\2\3\3\7\3\20\n\3\f\3\16\3\23\13"+
-		"\3\3\3\3\3\7\3\27\n\3\f\3\16\3\32\13\3\3\3\3\3\7\3\36\n\3\f\3\16\3!\13"+
-		"\3\3\3\5\3$\n\3\3\3\2\2\4\2\4\2\3\3\2\6\7\2(\2\t\3\2\2\2\4#\3\2\2\2\6"+
-		"\b\5\4\3\2\7\6\3\2\2\2\b\13\3\2\2\2\t\7\3\2\2\2\t\n\3\2\2\2\n\f\3\2\2"+
-		"\2\13\t\3\2\2\2\f\r\7\2\2\3\r\3\3\2\2\2\16\20\t\2\2\2\17\16\3\2\2\2\20"+
-		"\23\3\2\2\2\21\17\3\2\2\2\21\22\3\2\2\2\22\24\3\2\2\2\23\21\3\2\2\2\24"+
-		"\30\7\4\2\2\25\27\7\5\2\2\26\25\3\2\2\2\27\32\3\2\2\2\30\26\3\2\2\2\30"+
-		"\31\3\2\2\2\31\33\3\2\2\2\32\30\3\2\2\2\33$\7\3\2\2\34\36\7\5\2\2\35\34"+
-		"\3\2\2\2\36!\3\2\2\2\37\35\3\2\2\2\37 \3\2\2\2 \"\3\2\2\2!\37\3\2\2\2"+
-		"\"$\7\3\2\2#\21\3\2\2\2#\37\3\2\2\2$\5\3\2\2\2\7\t\21\30\37#";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\7\25\4\2\t\2\4\3"+
+		"\t\3\3\2\7\2\b\n\2\f\2\16\2\13\13\2\3\2\3\2\3\3\3\3\3\3\3\3\5\3\23\n\3"+
+		"\3\3\2\2\4\2\4\2\3\3\2\6\7\2\25\2\t\3\2\2\2\4\22\3\2\2\2\6\b\5\4\3\2\7"+
+		"\6\3\2\2\2\b\13\3\2\2\2\t\7\3\2\2\2\t\n\3\2\2\2\n\f\3\2\2\2\13\t\3\2\2"+
+		"\2\f\r\7\2\2\3\r\3\3\2\2\2\16\23\t\2\2\2\17\20\7\4\2\2\20\23\7\3\2\2\21"+
+		"\23\7\3\2\2\22\16\3\2\2\2\22\17\3\2\2\2\22\21\3\2\2\2\23\5\3\2\2\2\4\t"+
+		"\22";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

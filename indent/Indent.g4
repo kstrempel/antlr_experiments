@@ -7,8 +7,9 @@ program
 ;
 
 commands
-: inden=(INDENT|DEDENT)* var=VARIABLE (TABS)* NEWLINE  # commandExpr
-| (TABS)* NEWLINE                                      # commandNewline
+: inden=(INDENT|DEDENT)                        # commandExpr
+| var=VARIABLE NEWLINE                         # commandExpr
+| NEWLINE                                      # commandEmptyLine
 ;
 
 NEWLINE

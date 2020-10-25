@@ -17,11 +17,9 @@ d
 --g
 --h
 ---i
----j--
---
+---j
 --k
---l--
-
+--l
 ---m
 ---n
 z
@@ -34,25 +32,22 @@ class MyIndentLexer(IndentLexer):
       self.indentiations = 0
       self.newline_start = False
       self.first = True
-      self.next_token = None
+      self.next_token = []
+
+  def currentToken(self):
+    return self.next_token[-1]
 
   def nextToken(self):
     self.init_first()
 
-    if self.next_token:
-      token = self.next_token
-      self.next_token = None
-      return token
-
-    token = super().nextToken()
     if self.first:
       self.first = False
-      return token
+      return super().nextToken()
 
-    # Next token comes after a newline
-    if token.type == IndentLexer.NEWLINE:
-      self.newline_start = True
-      return token
+    if self.next_token:
+      return self.next_token.pop()
+
+    token = super().nextToken()
 
     # Fresh line fresh indentiation analyses
     if self.newline_start:
@@ -61,24 +56,28 @@ class MyIndentLexer(IndentLexer):
         token = super().nextToken()
         indentiations_level+=1
 
-      # perhaps a empty line with some tabs
-      if token.type == IndentLexer.NEWLINE:
-        self.newline_start = True
-        return token
+      self.next_token.append(token)
+      # Is the indentiation level different from the previous line
+      if self.indentiations > indentiations_level:
+        # identiation is smaller
+        for _ in range(indentiations_level, self.indentiations):
+          self.next_token.append(CommonToken(type=IndentParser.DEDENT))
+      elif self.indentiations < indentiations_level:
+        # identiation is bigger
+        for _ in range(self.indentiations, indentiations_level):
+          self.next_token.append(CommonToken(type=IndentParser.INDENT))
 
-      # Is the indentiation level different from the previous
-      # line
-      if self.indentiations != indentiations_level:
-        self.next_token = token
-        if self.indentiations > indentiations_level:
-          # identiation is smaller
-          token = CommonToken(type=IndentParser.DEDENT)
-        elif self.indentiations < indentiations_level:
-          # identiation is bigger
-          token = CommonToken(type=IndentParser.INDENT)
-        self.indentiations = indentiations_level
+      # set the current indentiation for the next line
+      self.indentiations = indentiations_level
 
-    self.newline_start = False
+      self.newline_start = False
+
+      return self.next_token.pop()
+
+    # A newline
+    if token.type == IndentLexer.NEWLINE:
+      self.newline_start = True
+
     return token
 
 

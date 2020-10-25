@@ -30,5 +30,5 @@ public class IndentBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitCommandNewline(IndentParser.CommandNewlineContext ctx) { return visitChildren(ctx); }
+	@Override public T visitCommandEmptyLine(IndentParser.CommandEmptyLineContext ctx) { return visitChildren(ctx); }
 }

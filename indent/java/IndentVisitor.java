@@ -23,10 +23,10 @@ public interface IndentVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCommandExpr(IndentParser.CommandExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code commandNewline}
+	 * Visit a parse tree produced by the {@code commandEmptyLine}
 	 * labeled alternative in {@link IndentParser#commands}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitCommandNewline(IndentParser.CommandNewlineContext ctx);
+	T visitCommandEmptyLine(IndentParser.CommandEmptyLineContext ctx);
 }
