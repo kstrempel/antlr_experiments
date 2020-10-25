@@ -31,18 +31,40 @@ class MyIndentLexer(IndentLexer):
     if not hasattr(self, 'indentiations'):
       self.indentiations = 0
       self.newline_start = False
-      self.first = True
       self.next_token = []
 
   def currentToken(self):
     return self.next_token[-1]
 
+  def begin_of_line(self, token):
+    # count all tabs
+    indentiations_level = 0
+    while token.type == IndentLexer.TABS:
+      token = super().nextToken()
+      indentiations_level+=1
+
+    # adds the next token to the stack
+    self.next_token.append(token)
+
+    # Is the indentiation level different from the previous line
+    if self.indentiations > indentiations_level:
+      # identiation is smaller
+      for _ in range(indentiations_level, self.indentiations):
+        self.next_token.append(CommonToken(type=IndentParser.DEDENT))
+    elif self.indentiations < indentiations_level:
+      # identiation is bigger
+      for _ in range(self.indentiations, indentiations_level):
+        self.next_token.append(CommonToken(type=IndentParser.INDENT))
+
+    # set the current indentiation for the next line
+    self.indentiations = indentiations_level
+
+    self.newline_start = False
+
+    return self.next_token.pop()
+
   def nextToken(self):
     self.init_first()
-
-    if self.first:
-      self.first = False
-      return super().nextToken()
 
     if self.next_token:
       return self.next_token.pop()
@@ -51,28 +73,7 @@ class MyIndentLexer(IndentLexer):
 
     # Fresh line fresh indentiation analyses
     if self.newline_start:
-      indentiations_level = 0
-      while token.type == IndentLexer.TABS:
-        token = super().nextToken()
-        indentiations_level+=1
-
-      self.next_token.append(token)
-      # Is the indentiation level different from the previous line
-      if self.indentiations > indentiations_level:
-        # identiation is smaller
-        for _ in range(indentiations_level, self.indentiations):
-          self.next_token.append(CommonToken(type=IndentParser.DEDENT))
-      elif self.indentiations < indentiations_level:
-        # identiation is bigger
-        for _ in range(self.indentiations, indentiations_level):
-          self.next_token.append(CommonToken(type=IndentParser.INDENT))
-
-      # set the current indentiation for the next line
-      self.indentiations = indentiations_level
-
-      self.newline_start = False
-
-      return self.next_token.pop()
+      return self.begin_of_line(token)
 
     # A newline
     if token.type == IndentLexer.NEWLINE:
